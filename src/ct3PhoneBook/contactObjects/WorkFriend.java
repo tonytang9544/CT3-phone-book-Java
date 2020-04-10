@@ -1,4 +1,31 @@
 package ct3PhoneBook.contactObjects;
 
-public class WorkFriend {
+public class WorkFriend extends Person {
+    private String organization;
+    private CompanyPosition position;
+
+    public WorkFriend(String name,
+                      String phoneNumber,
+                      String organization,
+                      CompanyPosition position){
+        super(name, phoneNumber);
+        this.organization = organization;
+        this.position = position;
+    }
+
+    public String getOrganization() {
+        return this.organization;
+    }
+
+    public CompanyPosition getPosition() {
+        return this.position;
+    }
+
+    public void setOrganization(String organization) {
+        this.organization = organization;
+    }
+
+    public void setPosition(CompanyPosition position) {
+        this.position = position;
+    }
 }
