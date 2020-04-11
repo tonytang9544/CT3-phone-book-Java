@@ -1,5 +1,6 @@
-package ct3PhoneBook.contactObjects.tests;
+package ct3PhoneBook.contactList.Tests;
 
+import ct3PhoneBook.contactList.ContactList;
 import ct3PhoneBook.contactObjects.*;
 import org.junit.jupiter.api.Test;
 

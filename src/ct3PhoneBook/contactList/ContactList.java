@@ -1,13 +1,17 @@
-package ct3PhoneBook.contactObjects;
+package ct3PhoneBook.contactList;
 
+import ct3PhoneBook.contactList.SortList.SortByName;
+import ct3PhoneBook.contactObjects.*;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class ContactList {
-    private List<Object> contactList;
+    private List<Person> contactList;
 
     public ContactList() {
-        contactList = new ArrayList<Object>();
+        contactList = new ArrayList<Person>();
     }
 
     public void addEntry(Person person) {
@@ -24,5 +28,9 @@ public class ContactList {
 
     public Object getEntryByIndex(int index) {
         return contactList.get(index);
+    }
+
+    public void sortByName() {
+        Collections.sort(this.contactList, new SortByName());
     }
 }
