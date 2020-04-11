@@ -1,6 +1,7 @@
 package ct3PhoneBook.contactList;
 
 import ct3PhoneBook.contactList.SortList.SortByName;
+import ct3PhoneBook.contactList.SortList.SortByPhoneNumber;
 import ct3PhoneBook.contactObjects.*;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -34,5 +35,7 @@ public class ContactList {
         Collections.sort(this.contactList, new SortByName());
     }
 
-
+    public void sortByPhoneNumber() {
+        Collections.sort(this.contactList, new SortByPhoneNumber());
+    }
 }

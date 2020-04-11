@@ -67,4 +67,39 @@ class ContactListTest {
         assertEquals("Tony", ((Person)contactList.getEntryByIndex(3)).getName());
     }
 
+    @Test
+    void sortByPhoneNumberTest() {
+        Person person = new Person("Tony", "077");
+        Friend friend1 = Friend.convertPersonToFriend(
+                person,
+                new GregorianCalendar(1995, 1,1),
+                "some nobody.");
+        Friend friend2 = new Friend(
+                "Paul",
+                "088",
+                new GregorianCalendar(1995, 1,1),
+                "A nice guy");
+        WorkFriend workFriend = new WorkFriend(
+                "Mark",
+                "077",
+                "Mark's",
+                CompanyPosition.CEO);
+        ContactList contactList = new ContactList();
+        contactList.addEntry(person);
+        contactList.addEntry(friend1);
+        contactList.addEntry(friend2);
+        contactList.addEntry(workFriend);
+        // Before sorting
+        assertEquals("Tony", ((Person)contactList.getEntryByIndex(0)).getName());
+        assertEquals("Tony", ((Person)contactList.getEntryByIndex(1)).getName());
+        assertEquals("Paul", ((Person)contactList.getEntryByIndex(2)).getName());
+        assertEquals("Mark", ((Person)contactList.getEntryByIndex(3)).getName());
+        contactList.sortByPhoneNumber();
+        // After sorting
+        assertEquals("Mark", ((Person)contactList.getEntryByIndex(0)).getName());
+        assertEquals("Tony", ((Person)contactList.getEntryByIndex(1)).getName());
+        assertEquals("Tony", ((Person)contactList.getEntryByIndex(2)).getName());
+        assertEquals("Paul", ((Person)contactList.getEntryByIndex(3)).getName());
+    }
+
 }
