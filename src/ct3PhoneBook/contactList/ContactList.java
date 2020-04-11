@@ -33,4 +33,6 @@ public class ContactList {
     public void sortByName() {
         Collections.sort(this.contactList, new SortByName());
     }
+
+
 }
