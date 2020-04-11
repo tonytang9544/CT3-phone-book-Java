@@ -28,4 +28,13 @@ public class WorkFriend extends Person {
     public void setPosition(CompanyPosition position) {
         this.position = position;
     }
+
+    public static WorkFriend convertPersonToWorkFriend(Person person,
+                                                       String organization,
+                                                       CompanyPosition position) {
+        return new WorkFriend(person.getName(),
+                person.getPhoneNumber(),
+                organization,
+                position);
+    }
 }

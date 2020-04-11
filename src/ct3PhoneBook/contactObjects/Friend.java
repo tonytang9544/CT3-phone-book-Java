@@ -1,21 +1,21 @@
 package ct3PhoneBook.contactObjects;
 
-import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class Friend extends Person {
-    private Date birthday;
+    private GregorianCalendar birthday;
     private String shortNotes;
 
     public Friend(String name,
                   String phoneNumber,
-                  Date birthday,
+                  GregorianCalendar birthday,
                   String shortNotes) {
         super(name, phoneNumber);
         this.birthday = birthday;
         this.shortNotes = shortNotes;
     }
 
-    public Date getBirthday() {
+    public GregorianCalendar getBirthday() {
         return birthday;
     }
 
@@ -23,7 +23,7 @@ public class Friend extends Person {
         return shortNotes;
     }
 
-    public void setBirthday(Date birthday) {
+    public void setBirthday(GregorianCalendar birthday) {
         this.birthday = birthday;
     }
 
@@ -31,5 +31,12 @@ public class Friend extends Person {
         this.shortNotes = shortNotes;
     }
 
-
+    public static Friend convertPersonToFriend(Person person,
+                                               GregorianCalendar birthday,
+                                               String shortNotes) {
+        return new Friend(person.getName(),
+                person.getPhoneNumber(),
+                birthday,
+                shortNotes);
+    }
 }
