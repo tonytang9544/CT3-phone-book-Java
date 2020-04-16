@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class ContactList {
-    private List<Person> contactList;
+    private final List<Person> contactList;
 
     public ContactList() {
         contactList = new ArrayList<Person>();
@@ -15,14 +15,6 @@ public class ContactList {
 
     public void addEntry(Person person) {
         contactList.add(person);
-    }
-
-    public void addEntry(Friend friend) {
-        contactList.add(friend);
-    }
-
-    public void addEntry(WorkFriend workFriend) {
-        contactList.add(workFriend);
     }
 
     public Object getEntryByIndex(int index) {
