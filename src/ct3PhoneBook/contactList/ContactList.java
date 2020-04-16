@@ -1,10 +1,8 @@
 package ct3PhoneBook.contactList;
 
-import ct3PhoneBook.contactList.SortList.SortByName;
-import ct3PhoneBook.contactList.SortList.SortByPhoneNumber;
+import ct3PhoneBook.contactList.SortList.*;
 import ct3PhoneBook.contactObjects.*;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 

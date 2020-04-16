@@ -1,4 +1,4 @@
-package ct3PhoneBook.contactList.Tests;
+package ct3PhoneBookTest.contactList;
 
 import ct3PhoneBook.contactList.ContactList;
 import ct3PhoneBook.contactObjects.*;

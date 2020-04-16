@@ -1,4 +1,4 @@
-package ct3PhoneBook.contactObjects.tests;
+package ct3PhoneBookTest.contactObjects;
 
 import ct3PhoneBook.contactObjects.Person;
 import org.junit.jupiter.api.DisplayName;
