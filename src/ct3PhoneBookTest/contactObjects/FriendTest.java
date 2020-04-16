@@ -17,7 +17,7 @@ class FriendTest {
         birthday.set(1995, 1,1);
         var friend = Friend.convertPersonToFriend(person, birthday,
                 "Tony is nobody.");
-        assertTrue(friend instanceof Friend);
+        assertEquals(person.getID() + 1, friend.getID());
         assertEquals("Tony", friend.getName());
         assertEquals("Tony is nobody.", friend.getShortNotes());
     }

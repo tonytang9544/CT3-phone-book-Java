@@ -17,7 +17,7 @@ class WorkFriendTest {
         var workFriend = WorkFriend.convertPersonToWorkFriend(person,
                 "Tony's",
                 CompanyPosition.APPRENTICE);
-        assertTrue(workFriend instanceof WorkFriend);
+        assertEquals(person.getID() + 1, workFriend.getID());
         assertEquals("Tony", workFriend.getName());
         assertEquals(CompanyPosition.APPRENTICE, workFriend.getPosition());
     }

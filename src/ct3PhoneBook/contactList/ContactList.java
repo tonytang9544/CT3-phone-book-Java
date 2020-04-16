@@ -28,4 +28,26 @@ public class ContactList {
     public void sortByPhoneNumber() {
         Collections.sort(this.contactList, new SortByPhoneNumber());
     }
+
+    public List<Person> findEntryByString(String keyWord) {
+        List<Person> matchedPerson = new ArrayList<Person>();
+        for (Person person : this.contactList) {
+            if (person.getName().contains(keyWord)
+            || person.getPhoneNumber().contains(keyWord))
+                matchedPerson.add(person);
+        }
+        return matchedPerson;
+    }
+
+    // Returns the maximum ID in this contactList
+    // use for initialise Person class only.
+    public long findMaxID() {
+        long maxID = 1;
+        for (Person person : this.contactList) {
+            if(maxID <= person.getID()) {
+                maxID = person.getID();
+            }
+        }
+        return maxID;
+    }
 }
