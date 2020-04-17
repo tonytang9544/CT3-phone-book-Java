@@ -29,14 +29,17 @@ public class ContactList {
         Collections.sort(this.contactList, new SortByPhoneNumber());
     }
 
-    public List<Person> findEntryByString(String keyWord) {
-        List<Person> matchedPerson = new ArrayList<Person>();
+    public ContactList findEntryByString(String keyWord) {
+        ContactList matchedPerson = new ContactList();
         for (Person person : this.contactList) {
-            if (person.getName().contains(keyWord)
-            || person.getPhoneNumber().contains(keyWord))
-                matchedPerson.add(person);
+            if (person.toString().contains(keyWord))
+                matchedPerson.addEntry(person);
         }
         return matchedPerson;
+    }
+
+    public int getNumberOfEntries() {
+        return this.contactList.size();
     }
 
     // Returns the maximum ID in this contactList

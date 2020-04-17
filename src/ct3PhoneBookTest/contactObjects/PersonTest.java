@@ -6,11 +6,11 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@DisplayName("Testing class Person getters and setters")
+@DisplayName("Test class Person")
 class PersonTest {
 
     @Test
-    @DisplayName("Testing setPhoneNumber method")
+    @DisplayName("Test setPhoneNumber method")
     void setPhoneNumber() {
         Person newPerson = new Person("Tony", "07777777777");
         newPerson.setPhoneNumber("08888888888");
@@ -36,4 +36,10 @@ class PersonTest {
         assertEquals("Tony", newPerson.getName());
     }
 
+    @Test
+    @DisplayName("Test toString() method in class Person")
+    void toStringTest() {
+        Person newPerson = new Person("Tony", "07777777777");
+        assertEquals("Tony 07777777777", newPerson.toString());
+    }
 }

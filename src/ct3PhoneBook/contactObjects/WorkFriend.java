@@ -37,4 +37,12 @@ public class WorkFriend extends Person {
                 organization,
                 position);
     }
+
+    @Override
+    public String toString() {
+        return this.getName() + ' '
+                + this.getPhoneNumber() + ' '
+                + this.getOrganization() + ' '
+                + this.getPosition().name();
+    }
 }

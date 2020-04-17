@@ -1,5 +1,6 @@
 package ct3PhoneBook.contactObjects;
 
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 public class Friend extends Person {
@@ -38,5 +39,16 @@ public class Friend extends Person {
                 person.getPhoneNumber(),
                 birthday,
                 shortNotes);
+    }
+
+    @Override
+    public String toString() {
+        int year = this.getBirthday().get(GregorianCalendar.YEAR);
+        int month = this.getBirthday().get(GregorianCalendar.MONTH);
+        int day = this.getBirthday().get(GregorianCalendar.DAY_OF_MONTH);
+        return this.getName() + ' '
+                + this.getPhoneNumber() + ' '
+                + year + '-' + month + '-' + day + ' '
+                + this.getShortNotes();
     }
 }
