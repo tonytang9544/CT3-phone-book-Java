@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class ContactListTest {
 
     @Test
-    void addEntryTest() {
+    void addEntry() {
         Person person = new Person("Tony", "07777777777");
         Friend friend = Friend.convertPersonToFriend(
                 person,
@@ -33,7 +33,7 @@ class ContactListTest {
     }
 
     @Test
-    void sortByNameTest() {
+    void sortByName() {
         Person person = new Person("Tony", "077");
         Friend friend1 = Friend.convertPersonToFriend(
                 person,
@@ -68,7 +68,7 @@ class ContactListTest {
     }
 
     @Test
-    void sortByPhoneNumberTest() {
+    void sortByPhoneNumber() {
         Person person = new Person("Tony", "077");
         Friend friend1 = Friend.convertPersonToFriend(
                 person,

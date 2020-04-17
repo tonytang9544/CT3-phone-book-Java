@@ -11,27 +11,27 @@ class PersonTest {
 
     @Test
     @DisplayName("Testing setPhoneNumber method")
-    void setPhoneNumberTest() {
+    void setPhoneNumber() {
         Person newPerson = new Person("Tony", "07777777777");
         newPerson.setPhoneNumber("08888888888");
         assertEquals("08888888888", newPerson.getPhoneNumber());
     }
 
     @Test
-    void setNameTest() {
+    void setName() {
         Person newPerson = new Person("Tony", "07777777777");
         newPerson.setName("Cici");
         assertEquals("Cici", newPerson.getName());
     }
 
     @Test
-    void getPhoneNumberTest() {
+    void getPhoneNumber() {
         Person newPerson = new Person("Tony", "07777777777");
         assertEquals("07777777777", newPerson.getPhoneNumber());
     }
 
     @Test
-    void getNameTest() {
+    void getName() {
         Person newPerson = new Person("Tony", "07777777777");
         assertEquals("Tony", newPerson.getName());
     }
