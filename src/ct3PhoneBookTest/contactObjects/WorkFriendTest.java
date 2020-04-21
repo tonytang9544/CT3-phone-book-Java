@@ -35,4 +35,5 @@ class WorkFriendTest {
         assertEquals("Tony 07777777777 Tony's APPRENTICE",
                 newWorkFriend.toString());
     }
+
 }

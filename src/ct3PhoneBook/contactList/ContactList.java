@@ -32,8 +32,7 @@ public class ContactList {
     public boolean delEntry(Person personToDelete) {
         try {
             return contactList.remove(personToDelete);
-        }
-        catch (NullPointerException e){
+        } catch (NullPointerException e) {
             return false;
         }
     }
