@@ -7,7 +7,7 @@ public enum UserCommand {
     DELETE_ENTRY("del"),
     FIND_ENTRY("find"),
     SORT_CONTACTS("sort"),
-    END_PROGRAM("end"),
+    QUIT_PROGRAM("quit"),
     ILLEGAL_COMMAND("ill"),
     SORT_CONTACTS_BY_NAME("sortbn"),
     SORT_CONTACTS_BY_PHONENUMBER("sortbp"),
