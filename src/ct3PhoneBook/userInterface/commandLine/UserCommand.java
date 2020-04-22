@@ -8,11 +8,13 @@ public enum UserCommand {
     FIND_ENTRY("find"),
     SORT_CONTACTS("sort"),
     QUIT_PROGRAM("quit"),
-    ILLEGAL_COMMAND("ill"),
-    SORT_CONTACTS_BY_NAME("sortbn"),
-    SORT_CONTACTS_BY_PHONENUMBER("sortbp"),
+    ILLEGAL_COMMAND("illegal command"),
+    SORT_CONTACTS_BY_NAME("sort by name"),
+    SORT_CONTACTS_BY_PHONENUMBER("sort by phone number"),
     LIST_ALL_ENTRIES("list"),
-    CANCEL_COMMAND("cancel")
+    CANCEL_COMMAND("cancel"),
+    IMPORT_FROM_FILE("import"),
+    EXPORT_TO_FILE("export")
     ;
 
     private static final Hashtable<String, UserCommand> reflectionTable

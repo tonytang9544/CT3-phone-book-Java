@@ -1,29 +1,54 @@
 package ct3PhoneBook.userInterface.commandLine;
 
 import ct3PhoneBook.contactList.ContactList;
-import ct3PhoneBook.contactObjects.Person;
+import ct3PhoneBook.contactObjects.*;
 
+import java.util.GregorianCalendar;
 import java.util.Scanner;
 
 public class AddEntryPage {
 
-    public static final void addEntryPage(ContactList contactList) {
+    public static void addEntryPage(ContactList contactList) {
         while (true) {
             CommandLineUI.clearConsole();
             printAddEntryPageTitle();
             String userInput = CommandLineUI.getUserInput();
-            if (userInput.equals("quit")) {
+            if (UserCommand.CANCEL_COMMAND
+                    == CommandLineUI.getUserCommand(userInput)) {
                 return;
             }
             else if (userInput.equals("Person")
                     || userInput.equals("person")) {
                 Person newPerson = getPersonDetails();
-                if (null == newPerson) {
-                    continue;
-                }
-                else {
+                if (CommandLineUI.isUserSure()){
                     contactList.addEntry(newPerson);
                     return;
+                }
+                else {
+                    continue;
+                }
+            }
+            else if (userInput.equals("Friend")
+                    || userInput.equals("friend")) {
+                Friend newFriend = getFriendDetails();
+                if (CommandLineUI.isUserSure()){
+                    contactList.addEntry(newFriend);
+                    return;
+                }
+                else {
+                    continue;
+                }
+            }
+            else if (userInput.equals("WorkFriend")
+                    || userInput.equals("workfriend")
+                    || userInput.equals("workFriend")) {
+                WorkFriend newWorkFriend = getWorkFriendDetails();
+                if (CommandLineUI.isUserSure()){
+                    contactList.addEntry(newWorkFriend);
+                    return;
+                }
+                else {
+                    continue;
                 }
             }
             else {
@@ -34,21 +59,67 @@ public class AddEntryPage {
     }
 
     private static Person getPersonDetails() {
-        System.out.println("Please enter the name of the person: ");
+        System.out.println("Please enter the name of the person:");
         String name = CommandLineUI.getUserInput();
-        System.out.println("Please enter the phone number of the person: ");
+        System.out.println("Please enter the phone number of the person:");
         String phoneNumber = CommandLineUI.getUserInput();
-        if (CommandLineUI.isUserSure()) {
-            return new Person(name, phoneNumber);
+        return new Person(name, phoneNumber);
+    }
+
+    private static Friend getFriendDetails() {
+        Person person = getPersonDetails();
+        GregorianCalendar birthday = getDateOfBirth();
+        System.out.println("Please enter the short note: ");
+        String shortNote = CommandLineUI.getUserInput();
+        return Friend.convertPersonToFriend(person, birthday, shortNote);
+    }
+
+    private static GregorianCalendar getDateOfBirth() {
+        while (true) {
+            System.out.println("Please enter the date of birth in the " +
+                    "format yyyy-mm-dd:");
+            String userInput = CommandLineUI.getUserInput();
+            String[] userInputDecantenated = userInput.split("-");
+            try {
+                int year = Integer.parseInt(userInputDecantenated[0]);
+                int month = Integer.parseInt(userInputDecantenated[1]);
+                int day = Integer.parseInt(userInputDecantenated[2]);
+
+                GregorianCalendar birthday = new GregorianCalendar();
+                birthday.set(year, month, day);
+                return birthday;
+            }
+            catch (Exception e) {
+                CommandLineUI.printErrorInputMsg(e);
+                continue;
+            }
         }
-        else {
-            CommandLineUI.printOperationCanceled();
-            return null;
+    }
+
+    private static WorkFriend getWorkFriendDetails() {
+        Person person = getPersonDetails();
+        System.out.println("Please enter the organization:");
+        String organization = CommandLineUI.getUserInput();
+        CompanyPosition position = getCompanyPosition();
+        return WorkFriend.convertPersonToWorkFriend(person, organization, position);
+    }
+
+    private static CompanyPosition getCompanyPosition() {
+        while (true) {
+            System.out.println("Please enter the company position: ");
+            String userInput = CommandLineUI.getUserInput();
+            try {
+                return CompanyPosition.valueOf(userInput);
+            }
+            catch (Exception e) {
+                CommandLineUI.printErrorInputMsg();
+                continue;
+            }
         }
     }
 
     private static void printAddEntryPageTitle() {
-        System.out.println("Type \"quit\" to cancel at any time.");
+        CommandLineUI.printTypeCancelToCancel();
         System.out.println("Enter the type of the new contact: ");
     }
 }

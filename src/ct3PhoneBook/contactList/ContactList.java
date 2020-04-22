@@ -32,9 +32,29 @@ public class ContactList {
     public boolean delEntry(Person personToDelete) {
         try {
             return contactList.remove(personToDelete);
-        } catch (NullPointerException e) {
+        } catch (Exception e) {
             return false;
         }
+    }
+
+    public boolean delEntry(long ID) {
+        Person personToDelete = getPersonByID(ID);
+        if (null == personToDelete) {
+            return false;
+        }
+        else {
+            return this.delEntry(personToDelete);
+        }
+
+    }
+
+    public Person getPersonByID (long ID) {
+        for (Person person : this.contactList) {
+            if (ID == person.getID()) {
+                return person;
+            }
+        }
+        return null;
     }
 
     public Person getEntryByIndex(int index) {

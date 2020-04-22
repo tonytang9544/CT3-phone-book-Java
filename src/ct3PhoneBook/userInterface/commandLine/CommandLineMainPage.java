@@ -1,8 +1,9 @@
 package ct3PhoneBook.userInterface.commandLine;
 
 import ct3PhoneBook.contactList.ContactList;
+import ct3PhoneBook.contactObjects.Person;
 
-public class MainPage {
+public class CommandLineMainPage {
 
     public static void mainPage() {
         ContactList contactList = new ContactList();
@@ -16,17 +17,25 @@ public class MainPage {
                 case ADD_ENTRY:
                     AddEntryPage.addEntryPage(contactList);
                     continue;
+                case DELETE_ENTRY:
+                    DeleteContact.deleteEntry(contactList);
+                    continue;
                 case LIST_ALL_ENTRIES:
-                    break;
+                    FormatPrinter.printContacts(contactList);
+                    continue;
+                case FIND_ENTRY:
+                    FindContact.findEntry(contactList);
+                    continue;
                 case QUIT_PROGRAM:
                     if (CommandLineUI.isUserSure()) {
+                        printExitMsg();
                         return;
                     }
                     else {
                         continue;
                     }
                 default:
-                    break;
+                    continue;
             }
         }
     }
@@ -39,5 +48,11 @@ public class MainPage {
                 "find = find entry by keyword; list = List all entries; " +
                 "quit = quit the program");
     }
+
+    private static void printExitMsg() {
+        System.out.println("Thanks for using CT3-PhoneBook-Java in console!");
+    }
+
+
 
 }

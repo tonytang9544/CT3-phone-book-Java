@@ -4,10 +4,6 @@ import java.util.Scanner;
 
 public class CommandLineUI {
 
-    public static void main(String[] args) {
-        MainPage.mainPage();
-    }
-
     /**
      * get the input from user. Filter out invalid input
      * @return 'i' if invalid input, command
@@ -15,6 +11,10 @@ public class CommandLineUI {
     public static UserCommand getUserCommand() {
         Scanner scanner = new Scanner(System.in);
         String userInput = scanner.nextLine();
+        return getUserCommand(userInput);
+    }
+
+    public static UserCommand getUserCommand(String userInput) {
         try {
             return UserCommand.ofCode(userInput);
         } catch (IllegalArgumentException e) {
@@ -53,8 +53,25 @@ public class CommandLineUI {
         System.out.println("Operation canceled. No changes recorded.");
     }
 
+    public static void printOperationSuccessful() {
+        System.out.println("Operation successful!");
+    }
+
+    public static void printOperationFailed() {
+        System.out.println("Operation failed!");
+    }
+
+    public static void printTypeCancelToCancel() {
+        System.out.println("Type \"cancel\" to cancel.");
+    }
+
     public static void printErrorInputMsg() {
         System.out.println("Invalid input! Please try again.");
+    }
+
+    public static void printErrorInputMsg(Exception e) {
+        System.out.println("Invalid input! " + e.getMessage());
+        System.out.println("Please try again.");
     }
 
     public static final void clearConsole() {
