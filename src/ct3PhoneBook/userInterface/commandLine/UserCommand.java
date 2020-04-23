@@ -18,21 +18,17 @@ public enum UserCommand {
     ;
 
     private static final Hashtable<String, UserCommand> reflectionTable
-            = new Hashtable<String, UserCommand>();
+            = new Hashtable<>();
     static {
         for (UserCommand c : values()) {
             reflectionTable.put(c.commandCode, c);
         }
     }
 
-    private String commandCode;
+    private final String commandCode;
 
     private UserCommand(String commandCode) {
         this.commandCode = commandCode;
-    }
-
-    public String getCommandCode() {
-        return this.commandCode;
     }
 
     public static UserCommand ofCode(String code) {

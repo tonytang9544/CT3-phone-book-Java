@@ -2,6 +2,7 @@ package ct3PhoneBook.userInterface.commandLine;
 
 import ct3PhoneBook.contactList.ContactList;
 import ct3PhoneBook.contactObjects.Person;
+import ct3PhoneBook.fileLoaderSaver.VcfParser;
 
 public class CommandLineMainPage {
 
@@ -34,6 +35,14 @@ public class CommandLineMainPage {
                     else {
                         continue;
                     }
+                case IMPORT_FROM_FILE:
+                    try{
+                        contactList = VcfParser.parseVcf(
+                                "/home/tony/Downloads/Anna.vcf");
+                    }
+                    catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
                 default:
                     continue;
             }
@@ -44,9 +53,10 @@ public class CommandLineMainPage {
         System.out.println("The phone book has: "
                 + numberOfEntries + " entries.");
         System.out.println("What do you want to do?");
-        System.out.println("add = Add a entry; del = Delete an entry; " +
-                "find = find entry by keyword; list = List all entries; " +
-                "quit = quit the program");
+        System.out.println("add = Add a entry; del = Delete an entry; "
+                + "find = find entry by keyword; list = List all entries; "
+                + "quit = quit the program; import = import from vCard file;"
+                + "export = export to vCard file");
     }
 
     private static void printExitMsg() {
