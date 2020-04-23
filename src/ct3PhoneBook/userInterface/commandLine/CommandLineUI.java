@@ -57,8 +57,17 @@ public class CommandLineUI {
         System.out.println("Operation successful!");
     }
 
+    public static void printOperationSuccessful(String message) {
+        System.out.println("Operation successful!");
+        System.out.println(message);
+    }
+
     public static void printOperationFailed() {
         System.out.println("Operation failed!");
+    }
+
+    public static void printOperationFailed(Exception e) {
+        System.out.println("Operation failed: " + e.getMessage());
     }
 
     public static void printTypeCancelToCancel() {
@@ -87,5 +96,10 @@ public class CommandLineUI {
             System.out.println("Error clearing the screen! Error message :"
                     + e.getMessage());
         }
+    }
+
+    public static boolean isUserInputCancel(String userInput) {
+        return UserCommand.CANCEL_COMMAND
+                == CommandLineUI.getUserCommand(userInput);
     }
 }

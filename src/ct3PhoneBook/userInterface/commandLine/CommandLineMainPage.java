@@ -14,37 +14,35 @@ public class CommandLineMainPage {
             switch (command) {
                 case ILLEGAL_COMMAND:
                     CommandLineUI.printErrorInputMsg();
-                    continue;
+                    break;
                 case ADD_ENTRY:
                     AddEntryPage.addEntryPage(contactList);
-                    continue;
+                    break;
                 case DELETE_ENTRY:
                     DeleteContact.deleteEntry(contactList);
-                    continue;
+                    break;
                 case LIST_ALL_ENTRIES:
                     FormatPrinter.printContacts(contactList);
-                    continue;
+                    break;
                 case FIND_ENTRY:
                     FindContact.findEntry(contactList);
-                    continue;
+                    break;
                 case QUIT_PROGRAM:
                     if (CommandLineUI.isUserSure()) {
                         printExitMsg();
                         return;
                     }
                     else {
-                        continue;
+                        break;
                     }
                 case IMPORT_FROM_FILE:
-                    try{
-                        contactList = VcfParser.parseVcf(
-                                "/home/tony/Downloads/Anna.vcf");
-                    }
-                    catch (Exception e) {
-                        System.out.println(e.getMessage());
-                    }
+                    ImportPage.importFromVCF(contactList);
+                    break;
+                case EXPORT_TO_FILE:
+                    ExportPage.exportVcard(contactList);
+                    break;
                 default:
-                    continue;
+                    break;
             }
         }
     }
