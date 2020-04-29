@@ -9,27 +9,6 @@ import java.util.*;
 
 public class VcfParser {
 
-
-    public static void main(String[] args) {
-        String filePath = "/home/tony/Downloads/Anna.vcf";
-        try {
-            ContactList contacts = parseVcf(filePath);
-            System.out.println("Number of entries: " + contacts.getNumberOfEntries());
-        }
-        catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
-        }
-
-//        // Test string split
-//        String testString = ";Anna Muszkiewiz;;;";
-//        String[] splittedString = testString.split(";", -2);
-//        for (String s : splittedString){
-//            System.out.println("\"" + s + "\"");
-//        }
-//        System.out.println("Number of entries: " + splittedString.length);
-
-    }
-
     public static ContactList parseVcf(String filePath) throws IOException {
         ContactList parsedContacts = new ContactList();
         BufferedReader reader = prepareFileToRead(filePath);

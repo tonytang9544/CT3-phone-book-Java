@@ -5,6 +5,14 @@ import ct3PhoneBook.userInterface.commandLine.CommandLineUI;
 
 public class PhoneBook {
     public static void main(String[] args) {
-        CommandLineMainPage.mainPage();
+        if (args.length == 0) {
+            System.out.println("GUI function not yet supported.");
+        }
+        else if (args[0].equals("--headless")) {
+            CommandLineMainPage.mainPage();
+        }
+        else {
+            System.out.println("Invalid input.");
+        }
     }
 }

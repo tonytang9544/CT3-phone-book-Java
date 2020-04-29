@@ -10,22 +10,6 @@ import java.io.IOException;
 import java.util.GregorianCalendar;
 
 public class VcfExporter {
-    // Test run the writeContactListToFile method
-    public static void main(String[] args) {
-        ContactList contactList = new ContactList();
-        contactList.addEntry(new Person("Tony", "077"));
-        contactList.addEntry(new WorkFriend("Tora", "088",
-                "Crick", CompanyPosition.VICE_PRESIDENT));
-        String path = "/home/tony/Desktop/2.vcf";
-        File file = new File(path);
-        System.out.println("Existing file? " + (file.isFile() && file.exists()));
-        try {
-            writeContactListToFile(contactList, path);
-        }
-        catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
-        }
-    }
 
     public static void writeContactListToFile(ContactList contacts, String path)
             throws IOException {

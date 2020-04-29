@@ -1,8 +1,6 @@
 package ct3PhoneBook.userInterface.commandLine;
 
 import ct3PhoneBook.contactList.ContactList;
-import ct3PhoneBook.contactObjects.Person;
-import ct3PhoneBook.fileLoaderSaver.VcfParser;
 
 public class CommandLineMainPage {
 
