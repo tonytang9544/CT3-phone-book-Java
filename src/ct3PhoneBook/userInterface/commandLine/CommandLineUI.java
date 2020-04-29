@@ -83,7 +83,7 @@ public class CommandLineUI {
         System.out.println("Please try again.");
     }
 
-    public static final void clearConsole() {
+    public static void clearConsole() {
         try {
             final String os = System.getProperty("os.name");
             if (os.contains("Windows")) {

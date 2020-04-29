@@ -12,7 +12,8 @@ public class PhoneBook {
             CommandLineMainPage.mainPage();
         }
         else {
-            System.out.println("Invalid input.");
+            System.out.println("Invalid input. Start in headless mode by default");
+            CommandLineMainPage.mainPage();
         }
     }
 }

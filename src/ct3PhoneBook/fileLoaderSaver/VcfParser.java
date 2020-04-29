@@ -16,7 +16,7 @@ public class VcfParser {
         for (String onePerson : segmentedFile) {
             Hashtable<SupportedAttributes, String> formattedData
                     = getAllAttributes(onePerson);
-            if (null != formattedData) {
+            if (!formattedData.isEmpty()) {
                 Person parsedPerson = parsePerson(formattedData);
                 if (null != parsedPerson) {
                     parsedContacts.addEntry(parsedPerson);
