@@ -4,6 +4,7 @@ import ct3PhoneBook.contactList.ContactList;
 import ct3PhoneBook.contactObjects.Friend;
 import ct3PhoneBook.contactObjects.Person;
 import ct3PhoneBook.contactObjects.WorkFriend;
+import ct3PhoneBook.userInterface.GUI.addEntryWindow.AddEntryWindow;
 
 import javax.swing.*;
 import java.awt.*;
@@ -54,6 +55,12 @@ class EntryPanel extends JPanel {
             }
         });
         JMenuItem popupModify = popupMenu.add("Modify");
+        popupModify.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                AddEntryWindow.start(EntryPanel.this.parentFrame, EntryPanel.this.getPerson());
+            }
+        });
         this.setComponentPopupMenu(popupMenu);
     }
 

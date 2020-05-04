@@ -5,7 +5,6 @@ import ct3PhoneBook.contactObjects.Friend;
 import ct3PhoneBook.contactObjects.Person;
 import ct3PhoneBook.contactObjects.WorkFriend;
 import ct3PhoneBook.userInterface.GUI.mainWindow.DrawMainWindow;
-import ct3PhoneBook.userInterface.commandLine.CommandLineUI;
 
 import javax.swing.*;
 import java.awt.*;
@@ -37,11 +36,12 @@ public class DrawAddEntryWindow extends JFrame {
     private JPanel confirmationPanel;
 
     private DrawMainWindow parentWindow;
+    private Person personToModify;
 
-    public DrawAddEntryWindow(DrawMainWindow mainWindow) {
+    public DrawAddEntryWindow(DrawMainWindow mainWindow, Person person) {
         this.parentWindow = mainWindow;
+        this.personToModify = person;
 
-        setTitle("Add Entry");
         setSize(ADD_ENTRY_WINDOW_WIDTH, ADD_ENTRY_WINDOW_HEIGHT);
         setResizable(false);
 
@@ -62,7 +62,7 @@ public class DrawAddEntryWindow extends JFrame {
         confirmButton = new JButton("OK");
         cancelButton = new JButton("Cancel");
 
-
+        initialiseWindow();
         constructAllPanels();
         updateWindow();
 
@@ -85,12 +85,23 @@ public class DrawAddEntryWindow extends JFrame {
         confirmButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                addEntryToMainWindow();
+                if (DrawAddEntryWindow.this.getTitle() == "Add Entry"){
+                    addEntryToMainWindow();
+                }
+                else {
+                    modifyEntryAtMainWindow();
+                }
             }
         });
 
 
     }
+
+    private void modifyEntryAtMainWindow() {
+        this.parentWindow.getContactList().delEntry(personToModify);
+        addEntryToMainWindow();
+    }
+
 
     private void addEntryToMainWindow() {
         String contactType = (String) typeOfContact.getSelectedItem();
@@ -136,9 +147,42 @@ public class DrawAddEntryWindow extends JFrame {
                             JOptionPane.OK_OPTION);
                 }
                 break;
-
         }
 
+    }
+
+    private void initialiseWindow() {
+        if (this.personToModify == null) {
+            setTitle("Add Entry");
+        }
+        else {
+            setTitle("Modify Entry");
+            updatePersonContentsToForm(personToModify);
+            if (personToModify instanceof WorkFriend) {
+                typeOfContact.setSelectedItem("WorkFriend");
+                WorkFriend workFriend = (WorkFriend) personToModify;
+                organization.setText(workFriend.getOrganization());
+                position.setSelectedItem(workFriend.getPosition().name());
+            }
+            else if (personToModify instanceof Friend) {
+                typeOfContact.setSelectedItem("Friend");
+                Friend friend = (Friend) personToModify;
+                notes.setText(friend.getShortNotes());
+                birthday.setText(getBirthdayString(friend));
+            }
+        }
+    }
+
+    private String getBirthdayString(Friend friend) {
+        GregorianCalendar birthday = friend.getBirthday();
+        return birthday.get(GregorianCalendar.YEAR) + "-"
+                + birthday.get(GregorianCalendar.MONTH) + "-"
+                + birthday.get(GregorianCalendar.DAY_OF_MONTH);
+    }
+
+    private void updatePersonContentsToForm(Person person) {
+        name.setText(person.getName());
+        phoneNumber.setText(person.getPhoneNumber());
     }
 
     private GregorianCalendar formattedBirthday(String userInput) {

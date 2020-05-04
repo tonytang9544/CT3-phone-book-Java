@@ -1,6 +1,7 @@
 package ct3PhoneBook.userInterface.GUI.addEntryWindow;
 
 
+import ct3PhoneBook.contactObjects.Person;
 import ct3PhoneBook.userInterface.GUI.mainWindow.DrawMainWindow;
 
 import javax.swing.*;
@@ -9,11 +10,11 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 public class AddEntryWindow {
-    public static void start(DrawMainWindow mainWindow) {
+    public static void start(DrawMainWindow mainWindow, Person person) {
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                DrawAddEntryWindow addEntryWindow = new DrawAddEntryWindow(mainWindow);
+                DrawAddEntryWindow addEntryWindow = new DrawAddEntryWindow(mainWindow, person);
                 addEntryWindow.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
                 addEntryWindow.addWindowListener(new WindowAdapter() {
                     @Override

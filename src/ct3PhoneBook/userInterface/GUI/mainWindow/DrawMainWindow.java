@@ -47,7 +47,7 @@ public class DrawMainWindow extends JFrame {
     private void performAddEntryButtonAction() {
         this.addEntryButton.setText("...");
         this.addEntryButton.setEnabled(false);
-        AddEntryWindow.start(this);
+        AddEntryWindow.start(this, null);
     }
 
     public JButton getAddEntryButton() {
