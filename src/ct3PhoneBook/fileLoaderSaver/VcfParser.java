@@ -10,8 +10,17 @@ import java.util.*;
 public class VcfParser {
 
     public static ContactList parseVcf(String filePath) throws IOException {
-        ContactList parsedContacts = new ContactList();
         BufferedReader reader = prepareFileToRead(filePath);
+        return parseVcfFromBufferedReader(reader);
+    }
+
+    public static ContactList parseVcf(File file) throws IOException {
+        BufferedReader reader = new BufferedReader(new FileReader(file));
+        return parseVcfFromBufferedReader(reader);
+    }
+
+    private static ContactList parseVcfFromBufferedReader(BufferedReader reader) throws IOException {
+        ContactList parsedContacts = new ContactList();
         List<String> segmentedFile = segmentFile(reader);
         for (String onePerson : segmentedFile) {
             Hashtable<SupportedAttributes, String> formattedData

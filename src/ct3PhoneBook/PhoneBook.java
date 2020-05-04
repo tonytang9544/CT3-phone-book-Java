@@ -1,12 +1,12 @@
 package ct3PhoneBook;
 
+import ct3PhoneBook.userInterface.GUI.mainWindow.MainWindow;
 import ct3PhoneBook.userInterface.commandLine.CommandLineMainPage;
-import ct3PhoneBook.userInterface.commandLine.CommandLineUI;
 
 public class PhoneBook {
     public static void main(String[] args) {
         if (args.length == 0) {
-            System.out.println("GUI function not yet supported.");
+            MainWindow.start();
         }
         else if (args[0].equals("--headless")) {
             CommandLineMainPage.mainPage();

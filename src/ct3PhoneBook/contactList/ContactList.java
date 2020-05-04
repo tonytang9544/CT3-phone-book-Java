@@ -89,14 +89,7 @@ public class ContactList {
         return this.contactList.size();
     }
 
-    // Returns the maximum ID in this contactList
-//    public long findMaxID() {
-//        long maxID = 1;
-//        for (Person person : this.contactList) {
-//            if(maxID <= person.getID()) {
-//                maxID = person.getID();
-//            }
-//        }
-//        return maxID;
-//    }
+    public void clearAllEntries() {
+        this.contactList.clear();
+    }
 }

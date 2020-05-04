@@ -14,6 +14,17 @@ public class VcfExporter {
     public static void writeContactListToFile(ContactList contacts, String path)
             throws IOException {
         BufferedWriter writer = new BufferedWriter(new FileWriter(path));
+        writeToFile(contacts, writer);
+    }
+
+    public static void writeContactListToFile(ContactList contacts, File file)
+            throws IOException {
+        BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+        writeToFile(contacts, writer);
+    }
+
+    private static void writeToFile(ContactList contacts, BufferedWriter writer)
+            throws IOException{
         if (contacts.getNumberOfEntries() <= 0) {
             return;
         }
