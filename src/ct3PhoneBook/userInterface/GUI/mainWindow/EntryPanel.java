@@ -15,7 +15,7 @@ import java.util.GregorianCalendar;
 class EntryPanel extends JPanel {
     private final Person person;
     private final DrawMainWindow parentFrame;
-    private final JCheckBox personSelect = new JCheckBox();
+    private final JCheckBox personSelect;
 
     protected EntryPanel(DrawMainWindow parent, Person person) throws NullPointerException {
         if (person == null || parent == null) {
@@ -23,6 +23,13 @@ class EntryPanel extends JPanel {
         }
         this.person = person;
         this.parentFrame = parent;
+        this.personSelect = new JCheckBox();
+        personSelect.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                parent.updateSelectionAssociatedMenu();
+            }
+        });
 
         this.setLayout(new GridLayout(2,1));
 

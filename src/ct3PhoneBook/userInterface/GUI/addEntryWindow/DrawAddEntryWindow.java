@@ -11,6 +11,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
+import java.time.format.DateTimeParseException;
 import java.util.GregorianCalendar;
 
 public class DrawAddEntryWindow extends JFrame {
@@ -85,21 +86,14 @@ public class DrawAddEntryWindow extends JFrame {
         confirmButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                if (DrawAddEntryWindow.this.getTitle() == "Add Entry"){
-                    addEntryToMainWindow();
+                if (person != null){
+                    mainWindow.getContactList().delEntry(person);
                 }
-                else {
-                    modifyEntryAtMainWindow();
-                }
+                addEntryToMainWindow();
             }
         });
 
 
-    }
-
-    private void modifyEntryAtMainWindow() {
-        this.parentWindow.getContactList().delEntry(personToModify);
-        addEntryToMainWindow();
     }
 
 
@@ -193,6 +187,9 @@ public class DrawAddEntryWindow extends JFrame {
             int day = Integer.parseInt(userInputDecantenated[2]);
 
             GregorianCalendar birthday = new GregorianCalendar();
+            if (month <= 0 || month > 12 || day <= 0 || day > 31) {
+                throw new IllegalArgumentException("Birthday format error.");
+            }
             birthday.set(year, month, day);
             return birthday;
         }

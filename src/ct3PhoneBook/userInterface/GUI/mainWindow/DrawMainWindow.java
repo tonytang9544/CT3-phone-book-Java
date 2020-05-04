@@ -9,6 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 import java.io.File;
 
 public class DrawMainWindow extends JFrame {
@@ -20,6 +21,10 @@ public class DrawMainWindow extends JFrame {
     private final JPanel centralPanel;
     private final JCheckBox selectAllCheck;
     private JMenuItem exportFileMenuItem;
+    private JMenuItem exportSelectedEntries;
+    private JMenuItem batchDelete;
+    private JMenuItem sortByName;
+    private JMenuItem sortByPhoneNumber;
     private boolean isSearching;
 
     private final ContactList contactList;
@@ -57,7 +62,9 @@ public class DrawMainWindow extends JFrame {
     private JMenuBar createMenuBar(JFrame frame) {
         JMenuBar menuBar = new JMenuBar();
         JMenu fileMenu = new JMenu("File");
+        JMenu contactsMenu = new JMenu("Contacts");
         menuBar.add(fileMenu);
+        menuBar.add(contactsMenu);
 
         JMenuItem importFileMenuItem = fileMenu.add("Import from vCard...");
         importFileMenuItem.addActionListener(new ActionListener() {
@@ -72,7 +79,18 @@ public class DrawMainWindow extends JFrame {
         this.exportFileMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                handleExport();
+                handleExport(DrawMainWindow.this.contactList);
+            }
+        });
+
+        this.exportSelectedEntries = fileMenu.add("Export selected entries to vCard...");
+        this.exportSelectedEntries.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                ContactList selectedList = getAllSelectedEntries();
+                if (selectedList.getNumberOfEntries() > 0) {
+                    handleExport(selectedList);
+                }
             }
         });
 
@@ -80,14 +98,101 @@ public class DrawMainWindow extends JFrame {
         exit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                System.exit(0);
+                DrawMainWindow.this.dispatchEvent(
+                        new WindowEvent(DrawMainWindow.this,
+                                WindowEvent.WINDOW_CLOSING));
             }
         });
 
+        JMenuItem inverseSelect = contactsMenu.add("Inverse Selection");
+        inverseSelect.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                for(Component i : DrawMainWindow.this.contentsPanel.getComponents()) {
+                    if (i instanceof EntryPanel) {
+                        ((EntryPanel) i).setSelected(!((EntryPanel) i).isSelected());
+                    }
+                }
+            }
+        });
+
+        this.batchDelete = contactsMenu.add("Delete All Selected");
+        this.batchDelete.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                ContactList listToDelete = getAllSelectedEntries();
+                int answer = JOptionPane.showConfirmDialog(
+                        DrawMainWindow.this,
+                        "Are you sure to delete "
+                                + listToDelete.getNumberOfEntries()
+                                + " Entries?",
+                        "Warning",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.PLAIN_MESSAGE);
+                if (answer == 0) {
+                    int numberToDelete = listToDelete.getNumberOfEntries();
+                    for (int i = 0; i < numberToDelete; i++) {
+                        DrawMainWindow.this.contactList.delEntry(
+                                listToDelete.getEntryByIndex(i));
+                    }
+                    updateCentralPanel(DrawMainWindow.this.contactList);
+                }
+            }
+        });
+
+        this.sortByName = contactsMenu.add("Sort Entries By Name");
+        this.sortByName.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                if (DrawMainWindow.this.isSearching()) {
+                    DrawMainWindow.this.contactList.sortByName();
+                    updateCentralPanel(DrawMainWindow.this.searchedList);
+                }
+                else {
+                    DrawMainWindow.this.contactList.sortByName();
+                    updateCentralPanel(DrawMainWindow.this.contactList);
+                }
+            }
+        });
+
+        this.sortByPhoneNumber = contactsMenu.add("Sort Entries By Phone Number");
+        this.sortByPhoneNumber.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                if (DrawMainWindow.this.isSearching()) {
+                    DrawMainWindow.this.contactList.sortByPhoneNumber();
+                    updateCentralPanel(DrawMainWindow.this.searchedList);
+                }
+                else {
+                    DrawMainWindow.this.contactList.sortByPhoneNumber();
+                    updateCentralPanel(DrawMainWindow.this.contactList);
+                }
+            }
+        });
         return menuBar;
     }
 
-    private void handleExport() {
+    private ContactList getAllSelectedEntries() {
+        ContactList selectedEntries = new ContactList();
+        for(Component i : this.contentsPanel.getComponents()) {
+            if (i instanceof EntryPanel && ((EntryPanel) i).isSelected()) {
+                selectedEntries.addEntry(((EntryPanel) i).getPerson());
+            }
+        }
+        return selectedEntries;
+    }
+
+    private ContactList getAllContactsPanelEntries() {
+        ContactList contactsPanelEntries = new ContactList();
+        for(Component i : this.contentsPanel.getComponents()) {
+            if (i instanceof EntryPanel) {
+                contactsPanelEntries.addEntry(((EntryPanel) i).getPerson());
+            }
+        }
+        return contactsPanelEntries;
+    }
+
+    private void handleExport(ContactList contactList) {
         JFileChooser fileChooser = new JFileChooser();
         File fileToSave;
         fileChooser.setDialogTitle("Export");
@@ -95,9 +200,9 @@ public class DrawMainWindow extends JFrame {
         int chooserReturn = fileChooser.showSaveDialog(this);
         if (chooserReturn == JFileChooser.APPROVE_OPTION) {
             fileToSave = fileChooser.getSelectedFile();
-            if (this.contactList.getNumberOfEntries() > 0) {
+            if (contactList.getNumberOfEntries() > 0) {
                 try{
-                    VcfExporter.writeContactListToFile(this.contactList, fileToSave);
+                    VcfExporter.writeContactListToFile(contactList, fileToSave);
                 }
                 catch (Exception e) {
                     System.out.println("Error: " + e.getMessage());
@@ -161,7 +266,15 @@ public class DrawMainWindow extends JFrame {
         // repaint is important!!!
         this.centralPanel.revalidate();
         this.centralPanel.repaint();
-        this.exportFileMenuItem.setEnabled(currentNumberOfEntries > 0);
+
+        // Update menu according to number of contacts in central panel
+        boolean hasItemInCurrentContact = currentNumberOfEntries > 0;
+        this.exportFileMenuItem.setEnabled(hasItemInCurrentContact);
+        this.sortByName.setEnabled(hasItemInCurrentContact);
+        this.sortByPhoneNumber.setEnabled(hasItemInCurrentContact);
+
+        // Update menu according to number of selected contacts
+        updateSelectionAssociatedMenu();
     }
 
     private void drawTopPanel() {
@@ -245,5 +358,11 @@ public class DrawMainWindow extends JFrame {
 
     public boolean isSearching() {
         return isSearching;
+    }
+
+    public void updateSelectionAssociatedMenu() {
+        boolean hasSelection = getAllSelectedEntries().getNumberOfEntries() > 0;
+        this.exportSelectedEntries.setEnabled(hasSelection);
+        this.batchDelete.setEnabled(hasSelection);
     }
 }
