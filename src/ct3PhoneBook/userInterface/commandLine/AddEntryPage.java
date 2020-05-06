@@ -3,6 +3,7 @@ package ct3PhoneBook.userInterface.commandLine;
 import ct3PhoneBook.contactList.ContactList;
 import ct3PhoneBook.contactObjects.*;
 
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Scanner;
 
@@ -75,25 +76,10 @@ public class AddEntryPage {
     }
 
     private static GregorianCalendar getDateOfBirth() {
-        while (true) {
-            System.out.println("Please enter the date of birth in the " +
-                    "format yyyy-mm-dd:");
-            String userInput = CommandLineUI.getUserInput();
-            String[] userInputDecantenated = userInput.split("-");
-            try {
-                int year = Integer.parseInt(userInputDecantenated[0]);
-                int month = Integer.parseInt(userInputDecantenated[1]);
-                int day = Integer.parseInt(userInputDecantenated[2]);
-
-                GregorianCalendar birthday = new GregorianCalendar();
-                birthday.set(year, month, day);
-                return birthday;
-            }
-            catch (Exception e) {
-                CommandLineUI.printErrorInputMsg(e);
-                continue;
-            }
-        }
+        System.out.println("Please enter the date of birth in the " +
+                "format yyyy-mm-dd:");
+        String userInput = CommandLineUI.getUserInput();
+        return Friend.stringToBirthday(userInput);
     }
 
     private static WorkFriend getWorkFriendDetails() {

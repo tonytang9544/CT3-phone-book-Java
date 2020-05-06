@@ -41,7 +41,7 @@ public class DrawMainWindow extends JFrame {
         isSearching = false;
         contactList = new ContactList();
         // Creating menu bar
-        this.setJMenuBar(createMenuBar(this));
+        this.setJMenuBar(createMenuBar());
 
         // Add components to window
         drawTopPanel();
@@ -59,7 +59,7 @@ public class DrawMainWindow extends JFrame {
         return this.addEntryButton;
     }
 
-    private JMenuBar createMenuBar(JFrame frame) {
+    private JMenuBar createMenuBar() {
         JMenuBar menuBar = new JMenuBar();
         JMenu fileMenu = new JMenu("File");
         JMenu contactsMenu = new JMenu("Contacts");
@@ -113,6 +113,7 @@ public class DrawMainWindow extends JFrame {
                         ((EntryPanel) i).setSelected(!((EntryPanel) i).isSelected());
                     }
                 }
+                updateSelectionAssociatedMenu();
             }
         });
 
@@ -241,6 +242,21 @@ public class DrawMainWindow extends JFrame {
                     System.out.println("Error: " + e.getMessage());
                 }
             }
+            if (totalImportedContactNumber > 0) {
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Successfully imported "
+                                + totalImportedContactNumber + " entries.",
+                        "Import Successful",
+                        JOptionPane.PLAIN_MESSAGE);
+            }
+            else {
+                JOptionPane.showMessageDialog(
+                        this,
+                        "No Entries found! Please check file formats.",
+                        "Import Failed",
+                        JOptionPane.ERROR_MESSAGE);
+            }
 
         }
     }
@@ -330,6 +346,7 @@ public class DrawMainWindow extends JFrame {
                         }
                     }
                 }
+                updateSelectionAssociatedMenu();
             }
         });
 

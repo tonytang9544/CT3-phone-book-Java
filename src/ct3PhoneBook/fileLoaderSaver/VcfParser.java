@@ -75,13 +75,8 @@ public class VcfParser {
     private static Person parseFriend(
             Hashtable<SupportedAttributes, String> personData) {
         try {
-            GregorianCalendar birthday = new GregorianCalendar();
-            String birthdayToParse = personData.get(
-                    SupportedAttributes.BIRTHDAY);
-            int year = Integer.parseInt(birthdayToParse.substring(0, 4));
-            int month = Integer.parseInt(birthdayToParse.substring(4, 6));
-            int day = Integer.parseInt(birthdayToParse.substring(6, 8));
-            birthday.set(year, month, day);
+            GregorianCalendar birthday = Friend.stringToBirthday(personData.get(
+                    SupportedAttributes.BIRTHDAY));
             return new Friend(personData.get(SupportedAttributes.NAME),
                     personData.get(SupportedAttributes.PHONENUMBER),
                     birthday,

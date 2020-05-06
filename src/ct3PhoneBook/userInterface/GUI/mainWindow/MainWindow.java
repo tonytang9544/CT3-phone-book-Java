@@ -36,7 +36,7 @@ public class MainWindow {
                         JOptionPane.showMessageDialog(mainWindow,
                                 "Thanks for using CT3-Phone-Book",
                                 "Thanks",
-                                JOptionPane.OK_OPTION);
+                                JOptionPane.PLAIN_MESSAGE);
                         mainWindow.dispose();
                         System.exit(0);
                     }

@@ -5,6 +5,7 @@ import ct3PhoneBook.contactObjects.Person;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -27,13 +28,13 @@ class FriendTest {
     @DisplayName("Test toString() method in class Friend")
     void toStringTest() {
         GregorianCalendar birthday = new GregorianCalendar();
-        birthday.set(1995, 1, 1);
+        birthday.set(1995, 0, 31);
         Friend newFriend = new Friend(
                 "Tony",
                 "07777777777",
                 birthday,
                 "Tony is boring.");
-        assertEquals("Tony 07777777777 1995-1-1 Tony is boring.",
+        assertEquals("Tony 07777777777 1995-1-31 Tony is boring.",
                 newFriend.toString());
     }
 }

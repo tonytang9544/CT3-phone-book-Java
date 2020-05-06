@@ -38,11 +38,8 @@ public class FormatPrinter {
 
     private static void printFrient(Friend friend) {
         printPerson(friend);
-        GregorianCalendar birthday = friend.getBirthday();
         System.out.println("Birthday: "
-                + birthday.get(GregorianCalendar.YEAR) + "-"
-                + birthday.get(GregorianCalendar.MONTH) + "-"
-                + birthday.get(GregorianCalendar.DAY_OF_MONTH));
+                + Friend.birthdayToDashedString(friend.getBirthday()));
         System.out.println("Short Note: " + friend.getShortNotes());
     }
 

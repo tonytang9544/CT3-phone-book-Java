@@ -11,14 +11,14 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
-import java.time.format.DateTimeParseException;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 public class DrawAddEntryWindow extends JFrame {
     private static final int ADD_ENTRY_WINDOW_WIDTH = 400;
     private static final int ADD_ENTRY_WINDOW_HEIGHT = 400;
 
-    private final JComboBox typeOfContact;
+    private final JComboBox<String> typeOfContact;
     private JPanel typeOfContactPanel;
     private final JTextField name;
     private JPanel namePanel;
@@ -30,14 +30,14 @@ public class DrawAddEntryWindow extends JFrame {
     private JPanel notesPanel;
     private final JTextField organization;
     private JPanel organizationPanel;
-    private final JComboBox position;
+    private final JComboBox<String> position;
     private JPanel positionPanel;
-    private JButton confirmButton;
-    private JButton cancelButton;
+    private final JButton confirmButton;
+    private final JButton cancelButton;
     private JPanel confirmationPanel;
 
-    private DrawMainWindow parentWindow;
-    private Person personToModify;
+    private final DrawMainWindow parentWindow;
+    private final Person personToModify;
 
     public DrawAddEntryWindow(DrawMainWindow mainWindow, Person person) {
         this.parentWindow = mainWindow;
@@ -46,7 +46,7 @@ public class DrawAddEntryWindow extends JFrame {
         setSize(ADD_ENTRY_WINDOW_WIDTH, ADD_ENTRY_WINDOW_HEIGHT);
         setResizable(false);
 
-        typeOfContact = new JComboBox();
+        typeOfContact = new JComboBox<>();
         typeOfContact.setEditable(false);
         typeOfContact.addItem("Person");
         typeOfContact.addItem("Friend");
@@ -56,7 +56,7 @@ public class DrawAddEntryWindow extends JFrame {
         birthday = new JTextField(25);
         notes = new JTextField(25);
         organization = new JTextField(25);
-        position = new JComboBox();
+        position = new JComboBox<>();
         for (CompanyPosition p : CompanyPosition.values()) {
             position.addItem(p.name());
         }
@@ -122,7 +122,7 @@ public class DrawAddEntryWindow extends JFrame {
                 break;
             case "Friend":
                 String userInput = birthday.getText();
-                GregorianCalendar birthdayFormat = formattedBirthday(userInput);
+                GregorianCalendar birthdayFormat = Friend.stringToBirthday(userInput);
                 if (birthdayFormat != null) {
                     this.parentWindow.getContactList().addEntry(
                             new Friend(name.getText(),
@@ -138,7 +138,7 @@ public class DrawAddEntryWindow extends JFrame {
                     JOptionPane.showMessageDialog(this,
                             "Incorrect birthday format. Please try again",
                             "Error",
-                            JOptionPane.OK_OPTION);
+                            JOptionPane.ERROR_MESSAGE);
                 }
                 break;
         }
@@ -162,40 +162,14 @@ public class DrawAddEntryWindow extends JFrame {
                 typeOfContact.setSelectedItem("Friend");
                 Friend friend = (Friend) personToModify;
                 notes.setText(friend.getShortNotes());
-                birthday.setText(getBirthdayString(friend));
+                birthday.setText(Friend.birthdayToDashedString(friend.getBirthday()));
             }
         }
-    }
-
-    private String getBirthdayString(Friend friend) {
-        GregorianCalendar birthday = friend.getBirthday();
-        return birthday.get(GregorianCalendar.YEAR) + "-"
-                + birthday.get(GregorianCalendar.MONTH) + "-"
-                + birthday.get(GregorianCalendar.DAY_OF_MONTH);
     }
 
     private void updatePersonContentsToForm(Person person) {
         name.setText(person.getName());
         phoneNumber.setText(person.getPhoneNumber());
-    }
-
-    private GregorianCalendar formattedBirthday(String userInput) {
-        String[] userInputDecantenated = userInput.split("-");
-        try {
-            int year = Integer.parseInt(userInputDecantenated[0]);
-            int month = Integer.parseInt(userInputDecantenated[1]);
-            int day = Integer.parseInt(userInputDecantenated[2]);
-
-            GregorianCalendar birthday = new GregorianCalendar();
-            if (month <= 0 || month > 12 || day <= 0 || day > 31) {
-                throw new IllegalArgumentException("Birthday format error.");
-            }
-            birthday.set(year, month, day);
-            return birthday;
-        }
-        catch (Exception e) {
-            return null;
-        }
     }
 
     private void updateWindow() {

@@ -45,19 +45,29 @@ class EntryPanel extends JPanel {
         popupDelete.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                DrawMainWindow mainWindow = EntryPanel.this.parentFrame;
-                mainWindow.getContactList().delEntry(
-                        EntryPanel.this.person);
-
-                if (mainWindow.isSearching()) {
-                    mainWindow.getSearchedList().delEntry(
+                int answer = JOptionPane.showConfirmDialog(
+                        EntryPanel.this,
+                        "Are you sure to delete entry for: "
+                                + EntryPanel.this.person.getName()
+                                + " ?",
+                        "Warning",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.PLAIN_MESSAGE);
+                if (answer == 0) {
+                    DrawMainWindow mainWindow = EntryPanel.this.parentFrame;
+                    mainWindow.getContactList().delEntry(
                             EntryPanel.this.person);
-                    mainWindow.updateCentralPanel(
-                            mainWindow.getSearchedList());
-                }
-                else {
-                    mainWindow.updateCentralPanel(
-                            mainWindow.getContactList());
+
+                    if (mainWindow.isSearching()) {
+                        mainWindow.getSearchedList().delEntry(
+                                EntryPanel.this.person);
+                        mainWindow.updateCentralPanel(
+                                mainWindow.getSearchedList());
+                    }
+                    else {
+                        mainWindow.updateCentralPanel(
+                                mainWindow.getContactList());
+                    }
                 }
             }
         });
@@ -98,12 +108,9 @@ class EntryPanel extends JPanel {
         }
         else if (person instanceof Friend) {
             extraInfo.setLayout(new GridLayout(2, 1));
-            GregorianCalendar birthday = ((Friend) person).getBirthday();
-            int year = birthday.get(GregorianCalendar.YEAR);
-            int month = birthday.get(GregorianCalendar.MONTH);
-            int day = birthday.get(GregorianCalendar.DAY_OF_MONTH);
             extraInfo.add(new JPanel().add(
-                    new JLabel("Bday: " + year + "-" + month + "-" + day)));
+                    new JLabel("Bday: " + Friend.birthdayToDashedString(
+                            ((Friend) person).getBirthday()))));
             extraInfo.add(new JPanel().add(
                     new JLabel("Note: " + ((Friend) person).getShortNotes())));
             this.add(extraInfo);
