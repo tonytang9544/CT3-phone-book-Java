@@ -1,4 +1,4 @@
-package ct3PhoneBook.userInterface.GUI.addEntryWindow;
+package ct3PhoneBook.userInterface.GUI.entryWindow;
 
 
 import ct3PhoneBook.contactObjects.Person;
@@ -9,23 +9,23 @@ import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-public class AddEntryWindow {
+public class EntryWindow {
     public static void start(DrawMainWindow mainWindow, Person person) {
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                DrawAddEntryWindow addEntryWindow = new DrawAddEntryWindow(mainWindow, person);
-                addEntryWindow.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-                addEntryWindow.addWindowListener(new WindowAdapter() {
+                DrawEntryWindow entryWindow = new DrawEntryWindow(mainWindow, person);
+                entryWindow.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+                entryWindow.addWindowListener(new WindowAdapter() {
                     @Override
                     public void windowClosed(WindowEvent e) {
                         mainWindow.getAddEntryButton().setText("Add");
                         mainWindow.getAddEntryButton().setEnabled(true);
-                        addEntryWindow.dispose();
+                        entryWindow.dispose();
                     }
                     @Override
                     public void windowClosing(WindowEvent e) {
-                        int result = JOptionPane.showConfirmDialog(addEntryWindow,
+                        int result = JOptionPane.showConfirmDialog(entryWindow,
                                 "Are you sure to leave? No changes will be recorded.",
                                 "", JOptionPane.YES_NO_OPTION);
                         if (result == 0) {
@@ -36,7 +36,7 @@ public class AddEntryWindow {
                         }
                     }
                 });
-                addEntryWindow.setVisible(true);
+                entryWindow.setVisible(true);
             }
         });
     }

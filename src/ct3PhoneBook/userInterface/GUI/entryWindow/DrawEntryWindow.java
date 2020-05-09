@@ -1,4 +1,4 @@
-package ct3PhoneBook.userInterface.GUI.addEntryWindow;
+package ct3PhoneBook.userInterface.GUI.entryWindow;
 
 import ct3PhoneBook.contactObjects.CompanyPosition;
 import ct3PhoneBook.contactObjects.Friend;
@@ -11,10 +11,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
-import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-public class DrawAddEntryWindow extends JFrame {
+public class DrawEntryWindow extends JFrame {
     private static final int ADD_ENTRY_WINDOW_WIDTH = 400;
     private static final int ADD_ENTRY_WINDOW_HEIGHT = 400;
 
@@ -39,7 +38,7 @@ public class DrawAddEntryWindow extends JFrame {
     private final DrawMainWindow parentWindow;
     private final Person personToModify;
 
-    public DrawAddEntryWindow(DrawMainWindow mainWindow, Person person) {
+    public DrawEntryWindow(DrawMainWindow mainWindow, Person person) {
         this.parentWindow = mainWindow;
         this.personToModify = person;
 
@@ -77,8 +76,8 @@ public class DrawAddEntryWindow extends JFrame {
         cancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                DrawAddEntryWindow.this.dispatchEvent(
-                        new WindowEvent(DrawAddEntryWindow.this,
+                DrawEntryWindow.this.dispatchEvent(
+                        new WindowEvent(DrawEntryWindow.this,
                                 WindowEvent.WINDOW_CLOSING));
             }
         });

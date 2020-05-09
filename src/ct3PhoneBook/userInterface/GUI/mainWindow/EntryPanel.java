@@ -4,13 +4,14 @@ import ct3PhoneBook.contactList.ContactList;
 import ct3PhoneBook.contactObjects.Friend;
 import ct3PhoneBook.contactObjects.Person;
 import ct3PhoneBook.contactObjects.WorkFriend;
-import ct3PhoneBook.userInterface.GUI.addEntryWindow.AddEntryWindow;
+import ct3PhoneBook.userInterface.GUI.entryWindow.EntryWindow;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.GregorianCalendar;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 class EntryPanel extends JPanel {
     private final Person person;
@@ -24,9 +25,9 @@ class EntryPanel extends JPanel {
         this.person = person;
         this.parentFrame = parent;
         this.personSelect = new JCheckBox();
-        personSelect.addActionListener(new ActionListener() {
+        personSelect.addItemListener(new ItemListener() {
             @Override
-            public void actionPerformed(ActionEvent actionEvent) {
+            public void itemStateChanged(ItemEvent itemEvent) {
                 parent.updateSelectionAssociatedMenu();
             }
         });
@@ -71,11 +72,22 @@ class EntryPanel extends JPanel {
                 }
             }
         });
+
         JMenuItem popupModify = popupMenu.add("Modify");
         popupModify.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                AddEntryWindow.start(EntryPanel.this.parentFrame, EntryPanel.this.getPerson());
+                EntryWindow.start(EntryPanel.this.parentFrame, EntryPanel.this.getPerson());
+            }
+        });
+
+        JMenuItem popupExport = popupMenu.add("Export");
+        popupExport.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                ContactList listToExport = new ContactList();
+                listToExport.addEntry(EntryPanel.this.person);
+                DrawMainWindow.handleExport(EntryPanel.this.parentFrame, listToExport);
             }
         });
         this.setComponentPopupMenu(popupMenu);
