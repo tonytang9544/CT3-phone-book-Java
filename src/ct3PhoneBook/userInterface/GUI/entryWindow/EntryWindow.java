@@ -15,6 +15,7 @@ public class EntryWindow {
             @Override
             public void run() {
                 DrawEntryWindow entryWindow = new DrawEntryWindow(mainWindow, person);
+                entryWindow.setFocusable(true);
                 entryWindow.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
                 entryWindow.addWindowListener(new WindowAdapter() {
                     @Override

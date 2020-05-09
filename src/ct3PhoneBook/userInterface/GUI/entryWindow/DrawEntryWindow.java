@@ -8,12 +8,10 @@ import ct3PhoneBook.userInterface.GUI.mainWindow.DrawMainWindow;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.util.GregorianCalendar;
 
-public class DrawEntryWindow extends JFrame {
+public class DrawEntryWindow extends JFrame{
     private static final int ADD_ENTRY_WINDOW_WIDTH = 400;
     private static final int ADD_ENTRY_WINDOW_HEIGHT = 400;
 
@@ -37,6 +35,8 @@ public class DrawEntryWindow extends JFrame {
 
     private final DrawMainWindow parentWindow;
     private final Person personToModify;
+
+
 
     public DrawEntryWindow(DrawMainWindow mainWindow, Person person) {
         this.parentWindow = mainWindow;
@@ -85,14 +85,17 @@ public class DrawEntryWindow extends JFrame {
         confirmButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                if (person != null){
-                    mainWindow.getContactList().delEntry(person);
-                }
-                addEntryToMainWindow();
+                handleConfirmButton();
             }
         });
 
+    }
 
+    private void handleConfirmButton() {
+        if (this.personToModify != null){
+            this.parentWindow.getContactList().delEntry(this.personToModify);
+        }
+        addEntryToMainWindow();
     }
 
 
@@ -241,33 +244,78 @@ public class DrawEntryWindow extends JFrame {
 
         namePanel = new JPanel();
         namePanel.add(new JLabel("Name: "));
+        name.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    handleConfirmButton();
+                }
+            }
+        });
         namePanel.add(name);
 
         phoneNumberPanel = new JPanel();
         phoneNumberPanel.add(new JLabel("Tel: "));
+        phoneNumber.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    handleConfirmButton();
+                }
+            }
+        });
         phoneNumberPanel.add(phoneNumber);
 
         birthdayPanel = new JPanel();
         birthdayPanel.add(new JLabel("Birthday (in yyyy-mm-dd format): "));
+        birthday.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    handleConfirmButton();
+                }
+            }
+        });
         birthdayPanel.add(birthday);
 
         notesPanel = new JPanel();
         notesPanel.add(new JLabel("Notes: "));
+        notes.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    handleConfirmButton();
+                }
+            }
+        });
         notesPanel.add(notes);
 
         organizationPanel = new JPanel();
         organizationPanel.add(new JLabel("Org: "));
+        organization.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    handleConfirmButton();
+                }
+            }
+        });
         organizationPanel.add(organization);
 
         positionPanel = new JPanel();
         positionPanel.add(new JLabel("Position: "));
+        position.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    handleConfirmButton();
+                }
+            }
+        });
         positionPanel.add(position);
 
         confirmationPanel = new JPanel();
         confirmationPanel.add(confirmButton);
         confirmationPanel.add(cancelButton);
     }
-
-
-
 }

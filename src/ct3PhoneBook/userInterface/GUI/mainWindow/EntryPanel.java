@@ -8,10 +8,7 @@ import ct3PhoneBook.userInterface.GUI.entryWindow.EntryWindow;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
+import java.awt.event.*;
 
 class EntryPanel extends JPanel {
     private final Person person;
@@ -29,6 +26,19 @@ class EntryPanel extends JPanel {
             @Override
             public void itemStateChanged(ItemEvent itemEvent) {
                 parent.updateSelectionAssociatedMenu();
+            }
+        });
+
+        this.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                EntryPanel.this.personSelect.setSelected(
+                        !EntryPanel.this.isSelected());
+                if (e.getClickCount() == 2 && !e.isConsumed()) {
+                    EntryWindow.start(
+                            EntryPanel.this.parentFrame,
+                            EntryPanel.this.getPerson());
+                }
             }
         });
 

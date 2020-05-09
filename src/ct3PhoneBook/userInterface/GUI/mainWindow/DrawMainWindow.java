@@ -220,6 +220,16 @@ public class DrawMainWindow extends JFrame {
         JPanel lowerTopPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         lowerTopPanel.add(this.selectAllCheck);
         lowerTopPanel.add(new JLabel("Select/Unselect all"));
+        lowerTopPanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (DrawMainWindow.this.selectAllCheck.isEnabled()) {
+                    DrawMainWindow.this.selectAllCheck.setSelected(
+                            !DrawMainWindow.this.selectAllCheck.isSelected());
+                    handleSelectAll();
+                }
+            }
+        });
         topPanel.setLayout(new GridLayout(2,1));
         topPanel.add(upperTopPanel);
         topPanel.add(lowerTopPanel);
@@ -277,6 +287,7 @@ public class DrawMainWindow extends JFrame {
         int numberOfEntriesInContactPanel
                 = this.getAllContactsPanelEntries().getNumberOfEntries();
         if (0 == numberOfEntriesInContactPanel) {
+            this.selectAllCheck.setSelected(false);
             this.selectAllCheck.setEnabled(false);
         }
         else {
@@ -324,9 +335,10 @@ public class DrawMainWindow extends JFrame {
 
     private void handleSelectAll() {
         if (this.contentsPanel.getComponents().length > 0) {
+            boolean isSelectingAllChecked = this.selectAllCheck.isSelected();
             for (Component i : this.contentsPanel.getComponents()) {
                 if (i instanceof EntryPanel) {
-                    ((EntryPanel) i).setSelected(this.selectAllCheck.isSelected());
+                    ((EntryPanel) i).setSelected(isSelectingAllChecked);
                 }
             }
         }
