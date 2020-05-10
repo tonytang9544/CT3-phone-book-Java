@@ -48,13 +48,22 @@ public class ContactList {
 
     }
 
-    public Person getPersonByID (long ID) {
+    public Person getPersonByID(long ID) {
         for (Person person : this.contactList) {
             if (ID == person.getID()) {
                 return person;
             }
         }
         return null;
+    }
+
+    public boolean hasPerson(Person personToFind) {
+        for (Person person : this.contactList) {
+            if (person.getID() == personToFind.getID()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public Person getEntryByIndex(int index) {

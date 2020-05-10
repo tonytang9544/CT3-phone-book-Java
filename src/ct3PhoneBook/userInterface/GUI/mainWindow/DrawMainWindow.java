@@ -1,6 +1,7 @@
 package ct3PhoneBook.userInterface.GUI.mainWindow;
 
 import ct3PhoneBook.contactList.ContactList;
+import ct3PhoneBook.contactObjects.Person;
 import ct3PhoneBook.fileLoaderSaver.VcfExporter;
 import ct3PhoneBook.fileLoaderSaver.VcfParser;
 import ct3PhoneBook.userInterface.GUI.entryWindow.EntryWindow;
@@ -12,12 +13,13 @@ import java.io.File;
 
 public class DrawMainWindow extends JFrame {
     private static final int MAINWINDOW_WIDTH = 400;
-    private static final int MAINWINDOW_HEIGHT = 400;
+    private static final int MAINWINDOW_HEIGHT = 450;
 
     private final JButton addEntryButton;
     private final JPanel contentsPanel;
     private final JPanel centralPanel;
     private final JCheckBox selectAllCheck;
+    private final JLabel statusLabel;
     private JTextField searchField;
     private JMenuItem exportFileMenuItem;
     private JMenuItem exportSelectedEntries;
@@ -39,12 +41,14 @@ public class DrawMainWindow extends JFrame {
         selectAllCheck = new JCheckBox();
         isSearching = false;
         contactList = new ContactList();
+        statusLabel = new JLabel();
         // Creating menu bar
         this.setJMenuBar(createMenuBar());
 
         // Add components to window
         drawTopPanel();
         drawCentralPanel();
+        drawStatusBar();
 
     }
 
@@ -67,23 +71,13 @@ public class DrawMainWindow extends JFrame {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 ContactList listToExport;
-                if (isSearching()) {
+                if (isSearching) {
                     listToExport = DrawMainWindow.this.searchedList;
                 }
                 else {
                     listToExport = DrawMainWindow.this.contactList;
                 }
-                if (listToExport.getNumberOfEntries() > 0) {
-                    handleExport(DrawMainWindow.this,
-                            listToExport);
-                }
-                else {
-                    JOptionPane.showMessageDialog(
-                            DrawMainWindow.this,
-                            "No contacts in current list. Abort Export",
-                            "Error",
-                            JOptionPane.ERROR_MESSAGE);
-                }
+                handleExport(listToExport);
             }
         });
 
@@ -93,7 +87,7 @@ public class DrawMainWindow extends JFrame {
             public void actionPerformed(ActionEvent actionEvent) {
                 ContactList selectedList = getAllSelectedEntries();
                 if (selectedList.getNumberOfEntries() > 0) {
-                    handleExport(DrawMainWindow.this, selectedList);
+                    handleExport(selectedList);
                 }
             }
         });
@@ -125,22 +119,7 @@ public class DrawMainWindow extends JFrame {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 ContactList listToDelete = getAllSelectedEntries();
-                int answer = JOptionPane.showConfirmDialog(
-                        DrawMainWindow.this,
-                        "Are you sure to delete "
-                                + listToDelete.getNumberOfEntries()
-                                + " Entries?",
-                        "Warning",
-                        JOptionPane.YES_NO_OPTION,
-                        JOptionPane.PLAIN_MESSAGE);
-                if (answer == 0) {
-                    int numberToDelete = listToDelete.getNumberOfEntries();
-                    for (int i = 0; i < numberToDelete; i++) {
-                        DrawMainWindow.this.contactList.delEntry(
-                                listToDelete.getEntryByIndex(i));
-                    }
-                    updateCentralPanel(DrawMainWindow.this.contactList);
-                }
+                handleDelete(listToDelete);
             }
         });
 
@@ -280,6 +259,15 @@ public class DrawMainWindow extends JFrame {
         this.add(this.centralPanel, BorderLayout.CENTER);
     }
 
+    private void drawStatusBar() {
+        this.statusLabel.setText("Welcome to CT3-Phone-Book-Java!");
+        JPanel statusBar = new JPanel();
+        statusBar.add(this.statusLabel, FlowLayout.LEFT);
+        statusBar.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        statusBar.setBackground(Color.white);
+        this.add(statusBar, BorderLayout.SOUTH);
+    }
+
     public void updateSelectionAssociatedMenu() {
         boolean hasSelection = getAllSelectedEntries().getNumberOfEntries() > 0;
         this.exportSelectedEntries.setEnabled(hasSelection);
@@ -294,6 +282,73 @@ public class DrawMainWindow extends JFrame {
             this.selectAllCheck.setEnabled(true);
             this.selectAllCheck.setSelected(numberOfEntriesInContactPanel
                     == this.getAllSelectedEntries().getNumberOfEntries());
+            for (Component i : this.contentsPanel.getComponents()) {
+                if (i instanceof EntryPanel) {
+                    ((EntryPanel) i).updateSelectRelatedMenu();
+                }
+            }
+        }
+        updateStatusBar();
+    }
+
+    private void updateStatusBar() {
+        int totalContacts = this.contactList.getNumberOfEntries();
+        int selectedContacts = getAllSelectedEntries().getNumberOfEntries();
+        if (selectedContacts > 0) {
+            this.statusLabel.setText("Number of contacts selected: "
+                    + selectedContacts);
+        }
+        else if (this.isSearching) {
+            int searchedContacts = this.searchedList.getNumberOfEntries();
+            this.statusLabel.setText("Number of contacts found: "
+                    + searchedContacts);
+        }
+        else {
+            this.statusLabel.setText("Number of contacts in current phone book: "
+                    + totalContacts);
+        }
+        this.statusLabel.revalidate();
+        this.statusLabel.repaint();
+    }
+
+    public void handleDelete(ContactList listToDelete) {
+        int numberToDelete = listToDelete.getNumberOfEntries();
+        StringBuilder messageForDelete = new StringBuilder("Are you sure to delete entries for: ");
+        if (0 == numberToDelete) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "No contacts selected to delete. Abort.",
+                    "Delete Aborted",
+                    JOptionPane.PLAIN_MESSAGE);
+            return;
+        }
+        else {
+            for (int i = 0; i < (Math.min(numberToDelete, 3)); i++) {
+                messageForDelete.append(listToDelete.getEntryByIndex(i).getName()).append(" ");
+            }
+            if (numberToDelete <= 3) {
+                messageForDelete.append("?");
+            }
+            else {
+                messageForDelete.append("... " + numberToDelete + " entries?");
+            }
+        }
+
+        int answer = JOptionPane.showConfirmDialog(
+                this,
+                messageForDelete,
+                "Warning",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.PLAIN_MESSAGE);
+        if (answer == 0) {
+            for (int i = 0; i < numberToDelete; i++) {
+                Person personToDelete = listToDelete.getEntryByIndex(i);
+                this.contactList.delEntry(personToDelete);
+                if (isSearching && this.searchedList.hasPerson(personToDelete)) {
+                    searchedList.delEntry(personToDelete);
+                }
+            }
+            updateCentralPanel(isSearching ? this.searchedList : this.contactList);
         }
     }
 
@@ -303,28 +358,36 @@ public class DrawMainWindow extends JFrame {
         EntryWindow.start(this, null);
     }
 
-    public static void handleExport(DrawMainWindow mainWindow, ContactList contactList) {
+    public void handleExport(ContactList contactList) {
+        if (contactList.getNumberOfEntries() == 0) {
+            JOptionPane.showMessageDialog(
+                    DrawMainWindow.this,
+                    "No contacts in current list. Abort Export",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         JFileChooser fileChooser = new JFileChooser();
         File fileToSave;
         fileChooser.setDialogTitle("Export");
         fileChooser.setMultiSelectionEnabled(true);
-        int chooserReturn = fileChooser.showSaveDialog(mainWindow);
+        int chooserReturn = fileChooser.showSaveDialog(this);
         if (chooserReturn == JFileChooser.APPROVE_OPTION) {
             fileToSave = fileChooser.getSelectedFile();
-            if (contactList.getNumberOfEntries() > 0) {
-                try{
-                    VcfExporter.writeContactListToFile(contactList, fileToSave);
-                }
-                catch (Exception e) {
-                    JOptionPane.showMessageDialog(
-                            mainWindow,
-                            "Error in export: " + e.getMessage(),
-                            "Export Failed",
-                            JOptionPane.ERROR_MESSAGE);
-                }
+            try{
+                VcfExporter.writeContactListToFile(contactList, fileToSave);
             }
+            catch (Exception e) {
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Error during export: " + e.getMessage(),
+                        "Export Failed",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+
             JOptionPane.showMessageDialog(
-                    mainWindow,
+                    this,
                     "Successfully exported "
                             + contactList.getNumberOfEntries()
                             + " entries.",
@@ -367,10 +430,10 @@ public class DrawMainWindow extends JFrame {
         fileChooser.setMultiSelectionEnabled(true);
         int chooserReturn = fileChooser.showOpenDialog(this);
         if (chooserReturn == JFileChooser.APPROVE_OPTION) {
-            filesToImport = fileChooser.getSelectedFiles();
-            int totalImportedContactNumber = 0;
-            for (File f : filesToImport) {
-                try {
+            try {
+                filesToImport = fileChooser.getSelectedFiles();
+                int totalImportedContactNumber = 0;
+                for (File f : filesToImport) {
                     ContactList contactsInOneFile
                             = VcfParser.parseVcf(f);
                     int numberOfEntryInOneFile
@@ -384,25 +447,30 @@ public class DrawMainWindow extends JFrame {
                         }
                     }
                 }
-                catch (Exception e) {
-                    System.out.println("Error: " + e.getMessage());
+                if (totalImportedContactNumber > 0) {
+                    JOptionPane.showMessageDialog(
+                            this,
+                            "Successfully imported "
+                                    + totalImportedContactNumber + " entries.",
+                            "Import Successful",
+                            JOptionPane.PLAIN_MESSAGE);
+                }
+                else {
+                    JOptionPane.showMessageDialog(
+                            this,
+                            "No Entries found! Please check file formats.",
+                            "Import Failed",
+                            JOptionPane.ERROR_MESSAGE);
                 }
             }
-            if (totalImportedContactNumber > 0) {
+            catch (Exception e) {
                 JOptionPane.showMessageDialog(
                         this,
-                        "Successfully imported "
-                                + totalImportedContactNumber + " entries.",
-                        "Import Successful",
-                        JOptionPane.PLAIN_MESSAGE);
-            }
-            else {
-                JOptionPane.showMessageDialog(
-                        this,
-                        "No Entries found! Please check file formats.",
+                        "Error during export! Error: " + e.getMessage(),
                         "Import Failed",
                         JOptionPane.ERROR_MESSAGE);
             }
+
         }
         updateCentralPanel(this.contactList);
     }
@@ -419,7 +487,7 @@ public class DrawMainWindow extends JFrame {
         return isSearching;
     }
 
-    private ContactList getAllSelectedEntries() {
+    public ContactList getAllSelectedEntries() {
         ContactList selectedEntries = new ContactList();
         if (this.contentsPanel.getComponents().length > 0) {
             for (Component i : this.contentsPanel.getComponents()) {

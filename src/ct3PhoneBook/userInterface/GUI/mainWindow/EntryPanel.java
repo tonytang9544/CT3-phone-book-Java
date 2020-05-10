@@ -14,6 +14,11 @@ class EntryPanel extends JPanel {
     private final Person person;
     private final DrawMainWindow parentFrame;
     private final JCheckBox personSelect;
+    private JMenuItem popupDeleteSelect;
+
+    private static final Color colorBorder = new Color(100, 100, 100);
+    private static final Color colorSelectedBackground = new Color(200, 200, 200);
+    private static final Color colorDefaultBackground = UIManager.getColor ( "Panel.background" );
 
     protected EntryPanel(DrawMainWindow parent, Person person) throws NullPointerException {
         if (person == null || parent == null) {
@@ -26,6 +31,7 @@ class EntryPanel extends JPanel {
             @Override
             public void itemStateChanged(ItemEvent itemEvent) {
                 parent.updateSelectionAssociatedMenu();
+                EntryPanel.this.updateBackgroundColor();
             }
         });
 
@@ -48,40 +54,30 @@ class EntryPanel extends JPanel {
         displayPersonInfo(person);
         displayExtraInfo(person);
 
+        this.setBorder(BorderFactory.createLineBorder(colorBorder));
     }
 
     private void drawPopupMenu() {
         JPopupMenu popupMenu = new JPopupMenu();
-        JMenuItem popupDelete = popupMenu.add("Delete");
+        JMenuItem popupDelete = popupMenu.add("Delete this entry");
         popupDelete.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                int answer = JOptionPane.showConfirmDialog(
-                        EntryPanel.this,
-                        "Are you sure to delete entry for: "
-                                + EntryPanel.this.person.getName()
-                                + " ?",
-                        "Warning",
-                        JOptionPane.YES_NO_OPTION,
-                        JOptionPane.PLAIN_MESSAGE);
-                if (answer == 0) {
-                    DrawMainWindow mainWindow = EntryPanel.this.parentFrame;
-                    mainWindow.getContactList().delEntry(
-                            EntryPanel.this.person);
-
-                    if (mainWindow.isSearching()) {
-                        mainWindow.getSearchedList().delEntry(
-                                EntryPanel.this.person);
-                        mainWindow.updateCentralPanel(
-                                mainWindow.getSearchedList());
-                    }
-                    else {
-                        mainWindow.updateCentralPanel(
-                                mainWindow.getContactList());
-                    }
-                }
+                ContactList listToDelete = new ContactList();
+                listToDelete.addEntry(EntryPanel.this.person);
+                EntryPanel.this.parentFrame.handleDelete(listToDelete);
             }
         });
+
+        this.popupDeleteSelect = popupMenu.add("Delete all selected");
+        this.popupDeleteSelect.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                EntryPanel.this.parentFrame.handleDelete(
+                        EntryPanel.this.parentFrame.getAllSelectedEntries());
+            }
+        });
+        this.popupDeleteSelect.setEnabled(false);
 
         JMenuItem popupModify = popupMenu.add("Modify");
         popupModify.addActionListener(new ActionListener() {
@@ -97,7 +93,7 @@ class EntryPanel extends JPanel {
             public void actionPerformed(ActionEvent actionEvent) {
                 ContactList listToExport = new ContactList();
                 listToExport.addEntry(EntryPanel.this.person);
-                DrawMainWindow.handleExport(EntryPanel.this.parentFrame, listToExport);
+                EntryPanel.this.parentFrame.handleExport(listToExport);
             }
         });
         this.setComponentPopupMenu(popupMenu);
@@ -139,6 +135,33 @@ class EntryPanel extends JPanel {
         }
     }
 
+    public void updateSelectRelatedMenu() {
+        if (this.parentFrame.getAllSelectedEntries().getNumberOfEntries() > 0) {
+            this.popupDeleteSelect.setEnabled(true);
+        }
+        else {
+            this.popupDeleteSelect.setEnabled(false);
+        }
+    }
+
+    private void updateBackgroundColor() {
+        recursivelyUpdateBackground(this);
+        this.revalidate();
+        this.repaint();
+    }
+
+    private void recursivelyUpdateBackground(JPanel panel) {
+        panel.setBackground(personSelect.isSelected() ?
+                colorSelectedBackground : colorDefaultBackground);
+        if (panel.getComponents().length > 0) {
+            for (Component i : panel.getComponents()) {
+                if (i instanceof JPanel) {
+                    recursivelyUpdateBackground((JPanel) i);
+                }
+            }
+        }
+    }
+
     public Person getPerson() {
         return this.person;
     }
@@ -150,6 +173,7 @@ class EntryPanel extends JPanel {
     public void setSelected(boolean selected) {
         this.personSelect.setSelected(selected);
     }
+
 
 
 
